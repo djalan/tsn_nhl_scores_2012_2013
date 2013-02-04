@@ -50,10 +50,18 @@ goal_total = 0
 assist_total = 0
 fantasy_points_total = 0
 goalers_status = []
+defenders_goal_value = 3
+defenders_assist_value = 2
+defenders_hat_trick_value = 4
+forwards_goal_value = 2
+forwards_assist_value = 1
+forwards_hat_trick_value = 3
 
 puts "G  A  F  Players"
 puts "----------------"
+
 games_list.each do |game|
+
 	html = Nokogiri::HTML(File.open(File.expand_path("#{game}.html")))
 	
 	playing = html.css('div#tsnStats table.siPlayerBoxStats tr').select { |tr| my_players.include? tr.css('a').text }
@@ -73,13 +81,15 @@ games_list.each do |game|
 		assist = children[2].text.to_i
 
 		if my_defenders.include? name
-			fantasy_goal = goal * 3
-			fantasy_assist  = assist * 2
+			fantasy_goal = goal * defenders_goal_value
+			fantasy_assist  = assist * defenders_assist_value
+			fantasy_hat_trick = (goal / 3) * defenders_hat_trick_value
 		elsif my_forwards.include? name
-			fantasy_goal = goal * 2
-			fantasy_assist  = assist * 1
+			fantasy_goal = goal * forwards_goal_value
+			fantasy_assist  = assist * forwards_assist_value
+			fantasy_hat_trick = (goal / 3) * forwards_hat_trick_value
 		end
-		fantasy_points = fantasy_goal + fantasy_assist
+		fantasy_points = fantasy_goal + fantasy_assist + fantasy_hat_trick
 		goal_total += goal
 		assist_total += assist
 		fantasy_points_total += fantasy_points
