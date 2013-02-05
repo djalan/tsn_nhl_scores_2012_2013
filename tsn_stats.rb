@@ -1,8 +1,11 @@
 #!/usr/bin/env ruby
+# coding: utf-8
+
 
 
 require 'nokogiri'
 require 'open-uri'
+
 
 
 # ==============
@@ -18,7 +21,6 @@ end
 
 html = Nokogiri::HTML(File.open(File.expand_path(scores_file)))
 games_list = []
-
 html.css('div#tsnMain div.alignRight a').select { |link| link['href'] =~ %r{/nhl/scores/boxscore/} }.each do |link|
 	game_id = link['href'].split('=')[-1]
 	games_list << game_id
@@ -26,6 +28,7 @@ html.css('div#tsnMain div.alignRight a').select { |link| link['href'] =~ %r{/nhl
 		f << open("#{boxscore_url}#{game_id}").read
 	end
 end
+
 
 
 # =================
@@ -43,19 +46,20 @@ my_skaters = my_defenders + my_forwards
 my_players = my_skaters + my_goalers
 
 
+
 # ================
 # Print statistics
 # ================
 goal_total = 0
 assist_total = 0
 fantasy_points_total = 0
-goalers_status = []
-defenders_goal_value = 3
-defenders_assist_value = 2
-defenders_hat_trick_value = 4
-forwards_goal_value = 2
-forwards_assist_value = 1
-forwards_hat_trick_value = 3
+goalers_array = []
+DEFENDERS_GOAL_VALUE = 3
+DEFENDERS_ASSIST_VALUE = 2
+DEFENDERS_HAT_TRICK_VALUE = 4
+FORWARDS_GOAL_VALUE = 2
+FORWARDS_ASSIST_VALUE = 1
+FORWARDS_HAT_TRICK_VALUE = 3
 
 puts "G  A  F  Players"
 puts "----------------"
@@ -66,23 +70,21 @@ games_list.each do |game|
 
 	p_skaters = playing.select { |tr| my_skaters.include? tr.css('a').text }
 	p_goalers = playing.select { |tr| my_goalers.include? tr.css('a').text }
-	goalers_status << p_goalers	
+	goalers_array << p_goalers	
 	
 	p_skaters.each do |tr|
-		children = tr.children
-
 		name = tr.css('a').text
-		goal = children[1].text.to_i
-		assist = children[2].text.to_i
+		goal = tr.children[1].text.to_i
+		assist = tr.children[2].text.to_i
 
 		if my_defenders.include? name
-			fantasy_goal = goal * defenders_goal_value
-			fantasy_assist  = assist * defenders_assist_value
-			fantasy_hat_trick = (goal / 3) * defenders_hat_trick_value
+			fantasy_goal = goal * DEFENDERS_GOAL_VALUE
+			fantasy_assist  = assist * DEFENDERS_ASSIST_VALUE
+			fantasy_hat_trick = (goal / 3) * DEFENDERS_HAT_TRICK_VALUE
 		elsif my_forwards.include? name
-			fantasy_goal = goal * forwards_goal_value
-			fantasy_assist  = assist * forwards_assist_value
-			fantasy_hat_trick = (goal / 3) * forwards_hat_trick_value
+			fantasy_goal = goal * FORWARDS_GOAL_VALUE
+			fantasy_assist  = assist * FORWARDS_ASSIST_VALUE
+			fantasy_hat_trick = (goal / 3) * FORWARDS_HAT_TRICK_VALUE
 		end
 		fantasy_points = fantasy_goal + fantasy_assist + fantasy_hat_trick
 		goal_total += goal
@@ -95,10 +97,13 @@ end
 
 puts "----------------"
 puts "#{'%02d' % goal_total} #{'%02d' % assist_total} #{'%02d' % fantasy_points_total} Total"
-if goalers_status.nil?
+#puts goalers_array.empty?
+#puts goalers_array.size
+#puts goalers_array.length
+if goalers_array.empty?
 	puts 'No goalie playing tonight'
 else	
-	goalers_status.each do |p_goaler|
+	goalers_array.each do |p_goaler|
 		p_goaler.each { |tr| puts "#{tr.css('a').text} is playing tonight" }
 	end
 end
