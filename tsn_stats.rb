@@ -109,4 +109,7 @@ else
 end
 
 
+Dir.glob('*.html') { |file| File.delete(file) }
+
+
 __END__
