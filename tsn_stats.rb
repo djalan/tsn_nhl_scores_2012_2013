@@ -61,17 +61,12 @@ puts "G  A  F  Players"
 puts "----------------"
 
 games_list.each do |game|
-
 	html = Nokogiri::HTML(File.open(File.expand_path("#{game}.html")))
-	
 	playing = html.css('div#tsnStats table.siPlayerBoxStats tr').select { |tr| my_players.include? tr.css('a').text }
 
 	p_skaters = playing.select { |tr| my_skaters.include? tr.css('a').text }
 	p_goalers = playing.select { |tr| my_goalers.include? tr.css('a').text }
-	
 	goalers_status << p_goalers	
-	
-	#p_goalers.each { |tr| puts "#{tr.css('a').text} is playing tonight" }
 	
 	p_skaters.each do |tr|
 		children = tr.children
