@@ -11,21 +11,19 @@ require 'open-uri'
 # ==============
 # Download games
 # ==============
-scores_url = "http://www.tsn.ca/nhl/scores"
-scores_file = "scores.html"
-boxscore_url = "http://www.tsn.ca/nhl/scores/boxscore/?id="
+SCORES_FILE = 'scores.html'
 
-File::open(scores_file, 'w') do |f|
-	f << open(scores_url).read
+File::open(SCORES_FILE, 'w') do |f|
+	f << open('http://www.tsn.ca/nhl/scores').read
 end
 
-html = Nokogiri::HTML(File.open(File.expand_path(scores_file)))
 games_list = []
+html = Nokogiri::HTML(File.open(File.expand_path(SCORES_FILE)))
 html.css('div#tsnMain div.alignRight a').select { |link| link['href'] =~ %r{/nhl/scores/boxscore/} }.each do |link|
 	game_id = link['href'].split('=')[-1]
 	games_list << game_id
 	File::open("#{game_id}.html", 'w') do |f|
-		f << open("#{boxscore_url}#{game_id}").read
+		f << open("http://www.tsn.ca/nhl/scores/boxscore/?id=#{game_id}").read
 	end
 end
 

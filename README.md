@@ -1,6 +1,14 @@
 NHL hockey pool live statistics using TSN.ca
 
-Missing:
-1) shootout
-2) points for goalies
-3) score for games
+Tasks
+- [x] points for forwards
+- [x] points for defenders
+- [x] hat tricks
+- [x] fantasy points
+- [x] delete downloaded files at the end
+- [ ] score for games
+- [ ] shootout points
+- [ ] 'No goalie playing tonight'
+- [ ] points for goalies for wins
+- [ ] points for goalies for OT
+- [ ] convert strings to symbols
