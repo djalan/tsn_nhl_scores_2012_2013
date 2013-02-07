@@ -11,14 +11,14 @@ Ruby script that analyzes HTML files with the parser Nokogiri
 When I waste time on similar sub-goals instead of working on Da Real Thing
 
 <h2>Tasks</h2>
-- [x] points for forwards
-- [x] points for defenders
-- [x] hat tricks
-- [x] fantasy points
-- [x] delete downloaded files at the end
-- [ ] score for games
-- [ ] shootout points
-- [ ] 'No goalie playing tonight'
-- [ ] points for goalies for wins
-- [ ] points for goalies for OT
-- [ ] convert strings to symbols
+[x] points for forwards
+[x] points for defenders
+[x] hat tricks
+[x] fantasy points
+[x] delete downloaded files at the end
+[x] score for games
+[ ] shootout points
+[x] 'No goalie playing tonight'
+[x] points for goalies for wins
+[x] points for goalies for OT
+[ ] convert strings to symbols
