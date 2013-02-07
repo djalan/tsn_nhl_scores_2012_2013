@@ -104,24 +104,22 @@ games_list.each do |game|
 		puts "#{goal}g #{assist}a #{fantasy_points}f #{name}#{name.length >= 15 ? "\t" : "\t\t"}#{teams_score.keys[0]} #{teams_score.values[0]} vs #{teams_score.keys[1]} #{teams_score.values[1]} - #{period}"
 	end
 
-	unless p_goalers.empty?
-		p_goalers.each do |p_goaler|
-			name = p_goaler.css('a').text
-			goalie_team = my_goalers[name]
-			opponent = (teams_score.reject{ |team,score| team =~ /#{goalie_team}/ }).keys[0]
+	p_goalers.each do |p_goaler|
+		name = p_goaler.css('a').text
+		goalie_team = my_goalers[name]
+		opponent = (teams_score.reject{ |team,score| team =~ /#{goalie_team}/ }).keys[0]
+		fantasy_goalie_points = 0
+		if teams_score[goalie_team] > teams_score[opponent] && (period == "FINAL" || period == "FINAL (OT)")
+			fantasy_goalie_points = GOALIES_WIN
+			puts "1w 0o #{fantasy_goalie_points}f #{name}#{name.length >= 15 ? "\t" : "\t\t"}#{teams_score.keys[0]} #{teams_score.values[0]} vs #{teams_score.keys[1]} #{teams_score.values[1]} - #{period}"
+		elsif period == 'FINAL (OT)'
+			fantasy_goalie_points = GOALIES_OT
+			puts "0w 1o #{fantasy_goalie_points}f #{name}#{name.length >= 15 ? "\t" : "\t\t"}#{teams_score.keys[0]} #{teams_score.values[0]} vs #{teams_score.keys[1]} #{teams_score.values[1]} - #{period}"
+		else
 			fantasy_goalie_points = 0
-			if teams_score[goalie_team] > teams_score[opponent] && (period == "FINAL" || period == "FINAL (OT)")
-				fantasy_goalie_points = GOALIES_WIN
-				puts "1w 0o #{fantasy_goalie_points}f #{name}#{name.length >= 15 ? "\t" : "\t\t"}#{teams_score.keys[0]} #{teams_score.values[0]} vs #{teams_score.keys[1]} #{teams_score.values[1]} - #{period}"
-			elsif period == 'FINAL (OT)'
-				fantasy_goalie_points = GOALIES_OT
-				puts "0w 1o #{fantasy_goalie_points}f #{name}#{name.length >= 15 ? "\t" : "\t\t"}#{teams_score.keys[0]} #{teams_score.values[0]} vs #{teams_score.keys[1]} #{teams_score.values[1]} - #{period}"
-			else
-				fantasy_goalie_points = 0
-				puts "0w 0o #{fantasy_goalie_points}f #{name}#{name.length >= 15 ? "\t" : "\t\t"}#{teams_score.keys[0]} #{teams_score.values[0]} vs #{teams_score.keys[1]} #{teams_score.values[1]} - #{period}"
-			end
-			fantasy_points_total += fantasy_goalie_points
+			puts "0w 0o #{fantasy_goalie_points}f #{name}#{name.length >= 15 ? "\t" : "\t\t"}#{teams_score.keys[0]} #{teams_score.values[0]} vs #{teams_score.keys[1]} #{teams_score.values[1]} - #{period}"
 		end
+		fantasy_points_total += fantasy_goalie_points
 	end
 end
 
