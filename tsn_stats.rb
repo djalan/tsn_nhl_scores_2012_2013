@@ -60,8 +60,8 @@ DEFENDERS_HAT_TRICK_VALUE = 4
 FORWARDS_GOAL_VALUE = 2
 FORWARDS_ASSIST_VALUE = 1
 FORWARDS_HAT_TRICK_VALUE = 3
-GOALIES_WIN = 3
-GOALIES_OT = 1
+GOALIES_WIN_VALUE = 3
+GOALIES_OT_VALUE = 1
 
 puts "G  A  F  Players"
 puts "----------------"
@@ -77,7 +77,6 @@ games_list.each do |game|
 	teams_score[boxscore[2].css('td a').text] = boxscore[2].css('td b').text.to_i
 	
 	playing = html.css('div#tsnStats table.siPlayerBoxStats tr').select { |tr| my_players.include? tr.css('a').text }
-
 	p_skaters = playing.select { |tr| my_skaters.include? tr.css('a').text }
 	p_goalers = playing.select { |tr| my_goalers.keys.include? tr.css('a').text }
 	goalers_array << p_goalers unless p_goalers.empty?
@@ -86,7 +85,6 @@ games_list.each do |game|
 		name = tr.css('a').text
 		goal = tr.children[1].text.to_i
 		assist = tr.children[2].text.to_i
-
 		if my_defenders.include? name
 			fantasy_goal = goal * DEFENDERS_GOAL_VALUE
 			fantasy_assist  = assist * DEFENDERS_ASSIST_VALUE
@@ -100,33 +98,36 @@ games_list.each do |game|
 		goal_total += goal
 		assist_total += assist
 		fantasy_points_total += fantasy_points
-
-		puts "#{goal}g #{assist}a #{fantasy_points}f #{name}#{name.length >= 15 ? "\t" : "\t\t"}#{teams_score.keys[0]} #{teams_score.values[0]} vs #{teams_score.keys[1]} #{teams_score.values[1]} - #{period}"
+		sprintf("%dg %da %df %-22s %15s %d vs %d %-15s %s",
+			goal, assist, fantasy_points, name, teams_score.keys[0], teams_score_values[0], teams_score.values[1], teams_score_keys[1], period)
 	end
 
 	p_goalers.each do |p_goaler|
 		name = p_goaler.css('a').text
 		goalie_team = my_goalers[name]
 		opponent = (teams_score.reject{ |team,score| team =~ /#{goalie_team}/ }).keys[0]
-		fantasy_goalie_points = 0
+		win = ot = fantasy_goalie_points = 0
 		if teams_score[goalie_team] > teams_score[opponent] && (period == "FINAL" || period == "FINAL (OT)")
-			fantasy_goalie_points = GOALIES_WIN
-			puts "1w 0o #{fantasy_goalie_points}f #{name}#{name.length >= 15 ? "\t" : "\t\t"}#{teams_score.keys[0]} #{teams_score.values[0]} vs #{teams_score.keys[1]} #{teams_score.values[1]} - #{period}"
+			win = 1
+			ot = 0
+			fantasy_goalie_points = GOALIES_WIN_VALUE
 		elsif period == 'FINAL (OT)'
-			fantasy_goalie_points = GOALIES_OT
-			puts "0w 1o #{fantasy_goalie_points}f #{name}#{name.length >= 15 ? "\t" : "\t\t"}#{teams_score.keys[0]} #{teams_score.values[0]} vs #{teams_score.keys[1]} #{teams_score.values[1]} - #{period}"
+			win = 0
+			ot = 1
+			fantasy_goalie_points = GOALIES_OT_VALUE
 		else
-			fantasy_goalie_points = 0
-			puts "0w 0o #{fantasy_goalie_points}f #{name}#{name.length >= 15 ? "\t" : "\t\t"}#{teams_score.keys[0]} #{teams_score.values[0]} vs #{teams_score.keys[1]} #{teams_score.values[1]} - #{period}"
+			win = ot = fantasy_goalie_points = 0
 		end
 		fantasy_points_total += fantasy_goalie_points
+		sprintf("%dw %do %df %-22s %15s %d vs %d %-15s %s",
+			win, ot, fantasy_goalie_points, name, teams_score.keys[0], teams_score_values[0], teams_score.values[1], teams_score_keys[1], period)
 	end
 end
 
 puts "----------------"
 puts "#{'%02d' % goal_total} #{'%02d' % assist_total} #{'%02d' % fantasy_points_total} Total"
 if goalers_array.empty?
-	puts 'No goalie playing tonight'
+	puts 'No goalie playing right now'
 end
 
 
