@@ -1,16 +1,16 @@
-<h1>What?</h1>
+# What? #
 NHL hockey pool live statistics using TSN.ca
 
-<h1>Why?</h1>
+# Why? #
 Too lazy to click on a few links and manually count points
 
-<h1>How?</h1>
+# How? #
 Ruby script that analyzes HTML files with the parser Nokogiri
 
-<h1>When?</h1>
+# When? #
 When I waste time on similar sub-goals instead of working on Da Real Thing
 
-<h2>Tasks</h2>
+## Tasks ##
 - [x] points for forwards
 - [x] points for defenders
 - [x] hat tricks
@@ -21,4 +21,5 @@ When I waste time on similar sub-goals instead of working on Da Real Thing
 - [x] 'No goalie playing tonight'
 - [x] points for goalies for wins
 - [x] points for goalies for OT
+- [ ] goalie not playing while team playing
 - [ ] convert strings to symbols

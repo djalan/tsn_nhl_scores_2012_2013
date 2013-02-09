@@ -98,8 +98,9 @@ games_list.each do |game|
 		goal_total += goal
 		assist_total += assist
 		fantasy_points_total += fantasy_points
-		sprintf("%dg %da %df %-22s %15s %d vs %d %-15s %s",
-			goal, assist, fantasy_points, name, teams_score.keys[0], teams_score_values[0], teams_score.values[1], teams_score_keys[1], period)
+		printf("%dg %da %df %-20s %13s %d vs %d %-13s %s\n",
+			goal, assist, fantasy_points, name, teams_score.keys[0], teams_score.values[0], teams_score.values[1], teams_score.keys[1], period)
+			
 	end
 
 	p_goalers.each do |p_goaler|
@@ -119,8 +120,8 @@ games_list.each do |game|
 			win = ot = fantasy_goalie_points = 0
 		end
 		fantasy_points_total += fantasy_goalie_points
-		sprintf("%dw %do %df %-22s %15s %d vs %d %-15s %s",
-			win, ot, fantasy_goalie_points, name, teams_score.keys[0], teams_score_values[0], teams_score.values[1], teams_score_keys[1], period)
+		printf("%dw %do %df %-20s %13s %d vs %d %-13s %s\n",
+			win, ot, fantasy_goalie_points, name, teams_score.keys[0], teams_score.values[0], teams_score.values[1], teams_score.keys[1], period)
 	end
 end
 
