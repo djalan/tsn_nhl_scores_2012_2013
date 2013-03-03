@@ -32,7 +32,7 @@ end
 # =================
 # Define my players
 # =================
-my_defenders = ['Joe Corvo', 'Tobias Enstrom', 'Erik Karlsson', 'Dustin Bufyglien', 'Michael Del Zotto', 'John-Michael Liles']
+my_defenders = ['Joe Corvo', 'Tobias Enstrom', 'Erik Karlsson', 'Dustin Byfuglien', 'Michael Del Zotto', 'John-Michael Liles']
 
 my_forwards = ['Travis Zajac', 'Joe Pavelski', 'Logan Couture', 'Tyler Seguin',
 	'Curtis Glencross', 'Tyler Ennis', 'Milan Lucic', 'Michael Ryder', 'Kyle Okposo', 'Scott Hartnell', 'Justin Williams', 'Joffrey Lupul']
@@ -112,7 +112,7 @@ games_list.each do |game|
 			win = 1
 			ot = 0
 			fantasy_goalie_points = GOALIES_WIN_VALUE
-		elsif period == 'FINAL (OT)'
+		elsif period == 'FINAL (OT)' || period == 'FINAL (SO)'
 			win = 0
 			ot = 1
 			fantasy_goalie_points = GOALIES_OT_VALUE
